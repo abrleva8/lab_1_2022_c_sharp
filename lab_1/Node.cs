@@ -9,5 +9,7 @@ namespace lab_1 {
         public override string ToString() {
             return this.value.ToString();
         }
+
+      
     }
 }

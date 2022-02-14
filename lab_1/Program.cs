@@ -12,25 +12,38 @@ namespace lab_1 {
 
 
             BinarySearchTree bst = new BinarySearchTree();
-            bst.insert(4);
-            bst.insert(6);
-            bst.insert(1);
-            bst.insert(3);
-            bst.insert(2);
-            bst.insert(1);
-            bst.insert(8);
+            // int[] numbers = {8, 3, 1, 6, 10, 9, 14, 13, 4, 7};
+            int[] numbers = {8, 3, 1, 6, 7, 10, 9, 14, 4};
+            foreach (int num in numbers) {
+                bst.insert(num);
+            }
 
+            // bst.detour(bst.root);
+
+            // Console.WriteLine(bst.find(1));
+            // Console.WriteLine(bst.find(2));
+            // Console.WriteLine(bst.find(3));
+            // Console.WriteLine(bst.find(4));
+            // Console.WriteLine(bst.find(5));
+            // Console.WriteLine(bst.find(6));
+            // Console.WriteLine(bst.find(7));
+            // Console.WriteLine(bst.find(8));
+            // Console.WriteLine(bst.find(9));
+
+            bst.remove(3);
             bst.detour(bst.root);
-
-            Console.WriteLine(bst.find(1));
-            Console.WriteLine(bst.find(2));
             Console.WriteLine(bst.find(3));
-            Console.WriteLine(bst.find(4));
-            Console.WriteLine(bst.find(5));
-            Console.WriteLine(bst.find(6));
-            Console.WriteLine(bst.find(7));
-            Console.WriteLine(bst.find(8));
-            Console.WriteLine(bst.find(9));
+
+            //
+            // bst.remove(6);
+            // bst.detour(bst.root);
+            // Console.WriteLine(bst.find(6));
+
+
+
+            // bst.remove(10);
+            // bst.detour(bst.root);
+            // Console.WriteLine(bst.find(10));
 
 
             Console.ReadKey();

@@ -1,19 +1,32 @@
 ﻿using System;
+using System.Collections;
 
 namespace lab_1 {
 
-    class BinarySearchTree {
-        public Node root;
+    class BinarySearchTree<T> where T : IComparable {
+        private Node<T>? _root;
 
-        public BinarySearchTree() {
-            root = null;
+        public BinarySearchTree(List<T> values) {
+            foreach (T value in values) {
+                this.insert(value);
+            }
         }
 
-        public int numberOfChildren(Node node) {
+        public Node<T>? root {
+            get {
+                return this._root;
+            }
+
+            set {
+                this._root = value;
+            }
+        }
+
+        public int numberOfChildren(Node<T>? node) {
             return Convert.ToInt32(node.left is not null) + Convert.ToInt32(node.right is not null);
         }
 
-        public Node getMin(Node node) {
+        private Node<T>? getMin(Node<T> node) {
             if (node.left is null) {
                 return null;
             }
@@ -25,28 +38,28 @@ namespace lab_1 {
             return node;
         }
 
-        public bool insert(int value) {
-            Node before = null, after = this.root;
+        public bool insert(T value) {
+            Node<T>? before = null;
+            Node<T>? after = this.root;
 
             while (after != null) {
                 before = after;
 
-                if (value < after.value) {
+                if (value.CompareTo(after.value) < 0) {
                     after = after.left;
-                } else if (value > after.value) {
+                } else if (value.CompareTo(after.value) > 0) {
                     after = after.right;
                 } else {
                     return false;
                 }
             }
 
-            Node newNode = new Node();
-            newNode.value = value;
+            Node<T>? newNode = new Node<T>(value);
 
             if (this.root == null) {
                 this.root = newNode;
             } else {
-                if (value < before.value) {
+                if (value.CompareTo(before.value) < 0) {
                     before.left = newNode;
                 } else {
                     before.right = newNode;
@@ -56,13 +69,13 @@ namespace lab_1 {
             return true;
         }
 
-        public bool find(int value) {
-            Node node = this.root;
+        public bool find(T value) {
+            Node<T>? node = this.root;
             while (node != null) {
 
-                if (value < node.value) {
+                if (value.CompareTo(node.value) < 0) {
                     node = node.left;
-                } else if (value > node.value) {
+                } else if (value.CompareTo(node.value) > 0) {
                     node = node.right;
                 } else {
                     return true;
@@ -72,42 +85,43 @@ namespace lab_1 {
             return false;
         }
 
-        public bool remove(int value) {
+        public bool remove(T value) {
             
             if (!find(value)) {
                 return false;
             }
 
-            Node before = null, after = this.root;
+            Node<T>? before = null;
+            Node<T>? after = this.root;
 
-            while (after.value != value) {
+            while (after.value.CompareTo(value) != 0) {
                 before = after;
 
-                if (value < after.value) {
+                if (value.CompareTo(after.value) < 0) {
                     after = after.left;
-                } else if (value > after.value) {
+                } else if (value.CompareTo(after.value) > 0) {
                     after = after.right;
                 }
             }
 
             if (this.numberOfChildren(after) == 0) {
-                if(value < before.value) {
+                if (value.CompareTo(before.value) < 0) {
                     before.left = null;
-                } else if (value > before.value) {
+                } else if (value.CompareTo(before.value) > 0) {
                     before.right = null;
                 }
                 // after = null;
             }
 
             if (this.numberOfChildren(after) == 1) {
-                if (value < before.value) {
+                if (value.CompareTo(before.value) < 0) {
                     if (after.right is not null) {
                         before.left = after.right;
                     } else {
                         before.left = after.left;
                     }
                     after.right = null;
-                } else if (value > before.value) {
+                } else if (value.CompareTo(before.value) > 0) {
                     if (after.right is not null) {
                         before.right = after.right;
                     } else {
@@ -120,14 +134,13 @@ namespace lab_1 {
             }
 
             if (this.numberOfChildren(after) == 2) {
-                Node minNode = getMin(after.right);
-                if (value < before.value) {
+                Node<T>? minNode = getMin(after.right);
+                if (value.CompareTo(before.value) < 0) {
                     if (minNode is null) {
                         before.left = after.right;
                         before.left.left = after.left;
                     } else {
-                        Node newNode = new Node();
-                        newNode.value = minNode.value;
+                        Node<T> newNode = new Node<T>(minNode.value);
                         remove(minNode.value);
                         newNode.left = after.left;
                         newNode.right = after.right;
@@ -138,8 +151,7 @@ namespace lab_1 {
                         before.right = after.right;
                         before.right.left = after.left;
                     } else {
-                        Node newNode = new Node();
-                        newNode.value = minNode.value;
+                        Node<T>? newNode = new Node<T>(minNode.value);
                         remove(minNode.value);
                         newNode.left = after.left;
                         newNode.right = after.right;
@@ -157,12 +169,12 @@ namespace lab_1 {
             return true;
         }
 
-        public void detour(Node node) {
-            if (node != null) {
-                this.detour(node.left);
-                Console.WriteLine(node + ": left child for " + node.left + " right child " + node.right);
-                this.detour(node.right);
-            }
+        public void detour(Node<T>? node) {
+            if (node == null) return;
+            this.detour(node.left);
+            Console.WriteLine(node + ": left child for " + node.left + " right child " + node.right);
+            this.detour(node.right);
         }
+
     }
 }

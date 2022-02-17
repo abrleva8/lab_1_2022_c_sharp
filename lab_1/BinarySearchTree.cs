@@ -5,6 +5,7 @@ namespace lab_1 {
 
     class BinarySearchTree<T> where T : IComparable {
         private Node<T>? _root;
+        private const int COLUMN_WIDTH = 10;
 
         public BinarySearchTree(List<T> values) {
             foreach (T value in values) {
@@ -24,18 +25,6 @@ namespace lab_1 {
 
         public int numberOfChildren(Node<T>? node) {
             return Convert.ToInt32(node.left is not null) + Convert.ToInt32(node.right is not null);
-        }
-
-        private Node<T>? getMin(Node<T> node) {
-            if (node.left is null) {
-                return null;
-            }
-
-            while (node.left is not null) {
-                 node = node.left;
-            }
-
-            return node;
         }
 
         public bool insert(T value) {
@@ -105,27 +94,28 @@ namespace lab_1 {
             }
 
             if (this.numberOfChildren(after) == 0) {
-                if (value.CompareTo(before.value) < 0) {
-                    before.left = null;
-                } else if (value.CompareTo(before.value) > 0) {
-                    before.right = null;
+                if (before is null) {
+                    this._root = null;
+                } else {
+                    if (value.CompareTo(before.value) < 0) {
+                        before.left = null;
+                    } else if (value.CompareTo(before.value) > 0) {
+                        before.right = null;
+                    }
                 }
                 // after = null;
             }
 
             if (this.numberOfChildren(after) == 1) {
-                if (value.CompareTo(before.value) < 0) {
-                    if (after.right is not null) {
-                        before.left = after.right;
-                    } else {
-                        before.left = after.left;
-                    }
-                    after.right = null;
-                } else if (value.CompareTo(before.value) > 0) {
-                    if (after.right is not null) {
-                        before.right = after.right;
-                    } else {
-                        before.right = after.left;
+                if (before is null) {
+                    this._root = after.right ?? after.left;
+                } else {
+                    if (value.CompareTo(before.value) < 0) {
+                        before.left = after.right ?? after.left;
+
+                        after.right = null;
+                    } else if (value.CompareTo(before.value) > 0) {
+                        before.right = after.right ?? after.left;
                     }
                 }
 
@@ -134,41 +124,39 @@ namespace lab_1 {
             }
 
             if (this.numberOfChildren(after) == 2) {
-                Node<T>? minNode = getMin(after.right);
-                if (value.CompareTo(before.value) < 0) {
-                    if (minNode is null) {
-                        before.left = after.right;
-                        before.left.left = after.left;
-                    } else {
-                        Node<T> newNode = new Node<T>(minNode.value);
-                        remove(minNode.value);
-                        newNode.left = after.left;
-                        newNode.right = after.right;
-                        before.left = newNode;
-                    }
-                } else {
-                    if (minNode is null) {
-                        before.right = after.right;
-                        before.right.left = after.left;
-                    } else {
-                        Node<T>? newNode = new Node<T>(minNode.value);
-                        remove(minNode.value);
-                        newNode.left = after.left;
-                        newNode.right = after.right;
-                        before.right = newNode;
-                    }
+                Node<T> node = after.right;
+                Node<T> p = null;
+                while (node.left is not null) {
+                    p = node;
+                    node = node.left;
                 }
 
-                after.right = null;
-                after.left = null;
 
+                if (p is not null) {
+                    p.left = node.right;
+                } else {
+                    after.right = node.right;
+                }
 
+                after.value = node.value;
             }
 
 
             return true;
         }
 
+        public int getHeight(Node<T> node) {
+            if (node is null) {
+                return 0;
+            }
+
+            int leftHeight = getHeight(node.left);
+            int rightHeight = getHeight(node.right);
+
+            return 1 + Math.Max(leftHeight, rightHeight);
+        }
+
+        
         public void detour(Node<T>? node) {
             if (node == null) return;
             this.detour(node.left);
@@ -176,5 +164,26 @@ namespace lab_1 {
             this.detour(node.right);
         }
 
+        public void print() {
+            this.print(this._root, 0);
+        }
+
+        private void print(Node<T>? node, int space) {
+            while (true) {
+                if (node is null) {
+                    return;
+                }
+
+                space += COLUMN_WIDTH;
+
+                print(node.right, space);
+
+                System.Console.WriteLine();
+                for (int i = COLUMN_WIDTH; i < space; i++) System.Console.Write(" ");
+                System.Console.WriteLine(node);
+
+                node = node.left;
+            }
+        }
     }
 }

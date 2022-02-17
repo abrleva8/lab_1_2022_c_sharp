@@ -2,13 +2,19 @@
 
 namespace lab_1 {
 
-    public enum MenuChoises {
+    public enum MenuChoices {
         EXIT,
         CONSOLE,
         FILES,
         RANDOM,
-        TEST
     }
+
+    public enum BinaryTreeInterface {
+        BACK,
+        ADD,
+        DELETE,
+        PRINT,
+    };
 
     class Menu {
         public void greeting() {
@@ -30,24 +36,61 @@ namespace lab_1 {
         }
 
 
+        public void printMenuForTreeInterface() {
+            System.Console.WriteLine("Enter 1 to add data");
+            System.Console.WriteLine("Enter 2 to delete data");
+            System.Console.WriteLine("Enter 3 to print tree");
+            System.Console.WriteLine("Enter 0 to back.");
+        }
+
+        public void binaryTreeInterface(BinaryTreeInterface bti, ref BinarySearchTree<Int32> bst) {
+            int d;
+            switch (bti) {
+                case BinaryTreeInterface.BACK:
+                    break;
+                case BinaryTreeInterface.ADD: {
+                    System.Console.WriteLine("Enter number to add to the tree");
+                    d = Input.getNumber();
+                    bst.insert(d);
+                    break;
+                }
+                case BinaryTreeInterface.DELETE:
+                    System.Console.WriteLine("Enter number to delete from the tree");
+                    d = Input.getNumber();
+                    bst.remove(d);
+                    break;
+                case BinaryTreeInterface.PRINT:
+                    bst.print();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(bti), bti, null);
+            }
+        }
+
+
         public void interfaceMenu() {
             bool is_restart = true;
             do {
                 Input input = new Input();
                 printMenu();
-                MenuChoises choice = (MenuChoises) input.getNumber();
+                // поменять на максимум и минимум чтобы избежать лишней зависимости
+                MenuChoices choice = (MenuChoices) Input.getNumber((int) MenuChoices.EXIT, (int) MenuChoices.RANDOM);
                 switch (choice) {
-                    case MenuChoises.EXIT:
+                    case MenuChoices.EXIT:
                         System.Console.WriteLine("Your choice is EXIT");
                         is_restart = false;
-                        //continue;
                         break;
-                    case MenuChoises.CONSOLE:
+                    case MenuChoices.CONSOLE:
                         System.Console.WriteLine("Your choice is CONSOLE");
                         System.Console.WriteLine("Enter the binary tree search's numbers");
                         List<Int32> numbers = input.getArray(System.Console.ReadLine());
                         BinarySearchTree<Int32> bst = new BinarySearchTree<int>(numbers);
-                        bst.detour(bst.root);
+                        printMenuForTreeInterface();
+                        // поменять на максимум и минимум чтобы избежать лишней зависимости
+                        BinaryTreeInterface d = (BinaryTreeInterface)
+                            Input.getNumber((int) BinaryTreeInterface.BACK, (int) BinaryTreeInterface.PRINT);
+                        binaryTreeInterface(d, ref bst);
+                        // bst.print();
                         continue;
                         break;
                 }

@@ -3,7 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace lab_1 {
     class Input {
-        public int getNumber() {
+        public static int getNumber() {
             int num = 0;
             while (true) {
 
@@ -12,6 +12,16 @@ namespace lab_1 {
                 }
 
                 Console.WriteLine("Invalid number. Try again.");
+            }
+
+            return num;
+        }
+
+        public static int getNumber(int a, int b) {
+            int num = getNumber();
+            while (num < a || num > b) {
+                Console.WriteLine($"Please enter number between {a} and {b}");
+                num = getNumber();
             }
 
             return num;

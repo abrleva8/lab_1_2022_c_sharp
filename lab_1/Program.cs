@@ -5,7 +5,7 @@ namespace lab_1 {
 
         private void run() {
             Menu menu = new Menu();
-            Input input = new Input();
+            //Input input = new Input();
             menu.greeting();
             menu.interfaceMenu();
 

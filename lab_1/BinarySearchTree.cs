@@ -8,6 +8,7 @@ namespace lab_1 {
         private const int COLUMN_WIDTH = 10;
 
         public BinarySearchTree(List<T> values) {
+            this._root = null;
             foreach (T value in values) {
                 this.insert(value);
             }
@@ -145,7 +146,7 @@ namespace lab_1 {
             return true;
         }
 
-        public int getHeight(Node<T> node) {
+        public int getHeight(Node<T>? node) {
             if (node is null) {
                 return 0;
             }
@@ -162,6 +163,19 @@ namespace lab_1 {
             this.detour(node.left);
             Console.WriteLine(node + ": left child for " + node.left + " right child " + node.right);
             this.detour(node.right);
+        }
+
+        public List<T> rightDetour(Node<T>? node) {
+            List<T> detour = new List<T>();
+            rightDetourWorker(node, ref detour);
+            return detour;
+        }
+
+        private void rightDetourWorker(Node<T>? node, ref List<T> detour) {
+            if (node == null) return;
+            detour.Add(node.value);
+            this.rightDetourWorker(node.left, ref detour);
+            this.rightDetourWorker(node.right, ref detour);
         }
 
         public void print() {
@@ -184,6 +198,17 @@ namespace lab_1 {
 
                 node = node.left;
             }
+        }
+
+        public static BinarySearchTree<int> createRandomIntTree(int maxSize, int minValue, int maxValue) {
+            var rand = new Random();
+            int size = rand.Next(1, maxSize);
+            List<int> values = new List<int>(size);
+            for (int i = 0; i < size; i++) {
+                values.Add(rand.Next(minValue, maxValue));
+            }
+
+            return new BinarySearchTree<int>(values);
         }
     }
 }

@@ -29,13 +29,14 @@ namespace lab_1 {
 
 
         public List<Int32> getArray(string? str) {
-            string[] subs = str.Split(' ');
-            List<Int32> numbers = new List<int>(); 
-            foreach (string sub in subs) {
-                if (int.TryParse(sub, out int number)) {
-                    numbers.Add(number);
+            string[]? subs = str?.Split(' ');
+            List<Int32> numbers = new List<int>();
+            if (subs != null)
+                foreach (string sub in subs) {
+                    if (int.TryParse(sub, out int number)) {
+                        numbers.Add(number);
+                    }
                 }
-            }
 
             return numbers;
         }

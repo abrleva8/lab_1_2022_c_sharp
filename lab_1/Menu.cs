@@ -30,6 +30,7 @@ namespace lab_1 {
 
 
         public void printMenu() {
+            System.Console.WriteLine("");
             System.Console.WriteLine("Enter 1 to read data from console.");
             System.Console.WriteLine("Enter 2 to read data from file.");
             System.Console.WriteLine("Enter 3 to set random number." );
@@ -46,33 +47,37 @@ namespace lab_1 {
             System.Console.WriteLine("Enter 0 to back.");
         }
 
-        public void binaryTreeInterface(ref BinarySearchTree<Int32> bst) {
+        public void binaryTreeInterface(ref BinarySearchTree<int>? bst) {
             bool isRestart = true;
             int d = 0;
             do {
                 printMenuForTreeInterface();
                 BinaryTreeInterface bti = (BinaryTreeInterface)
                     Input.getNumber((int) BinaryTreeInterface.BACK, (int) BinaryTreeInterface.SAVE);
+                FileOutput fo = new FileOutput();
                 switch (bti) {
                     case BinaryTreeInterface.BACK:
+                        System.Console.WriteLine("The data will be lost!");
+                        fo.saveData(bst);
                         isRestart = false;
                         break;
                     case BinaryTreeInterface.ADD: {
                         System.Console.WriteLine("Enter number to add to the tree");
                         d = Input.getNumber();
-                        bst.insert(d);
+                        bool isAdded = bst != null && bst.insert(d);
+                        System.Console.WriteLine(isAdded ? $"{d} has been added to the tree" : $"{d} already is in the tree");
                         break;
                     }
                     case BinaryTreeInterface.DELETE:
                         System.Console.WriteLine("Enter number to delete from the tree");
                         d = Input.getNumber();
-                        bst.remove(d);
+                        bool isDeleted = bst != null && bst.remove(d);
+                        System.Console.WriteLine(isDeleted ? $"{d} has been deleted from the tree" : $"{d} isn't in the tree");
                         break;
                     case BinaryTreeInterface.PRINT:
-                        bst.print();
+                        bst?.print();
                         break;
                     case BinaryTreeInterface.SAVE:
-                        FileOutput fo = new FileOutput(); 
                         fo.saveData(bst);
                         break;
                     default:
@@ -86,7 +91,7 @@ namespace lab_1 {
 
         public void interfaceMenu() {
             bool isRestart = true;
-            BinarySearchTree<int> bst = null;
+            BinarySearchTree<int>? bst = null;
             FileOutput fo = new FileOutput();
             do {
                 Input input = new Input();
@@ -115,17 +120,20 @@ namespace lab_1 {
                     case MenuChoices.FILES:
                         System.Console.WriteLine("Your choice is FILES");
                         FileInput fileInput = new FileInput();
-                        fileInput.read(ref bst);
-                        System.Console.WriteLine(bst.getHeight(bst.root) == 0
-                            ? "Warning! The tree is empty!"
-                            : "The tree is filled!");
-                        binaryTreeInterface(ref bst);
+                        bool isRead = fileInput.read(ref bst);
+                        if (isRead) {
+                            System.Console.WriteLine(bst != null && bst.getHeight(bst.root) == 0
+                                ? "Warning! The tree is empty!"
+                                : "The tree is filled!");
+                            binaryTreeInterface(ref bst);
+                        }
+                        
                         break;
 
                     case MenuChoices.RANDOM:
                         System.Console.WriteLine("Your choice is RANDOM");
                         bst = BinarySearchTree<int>.createRandomIntTree(10, 1, 10);
-                        System.Console.WriteLine(bst.getHeight(bst.root) == 0
+                        System.Console.WriteLine(bst != null && bst.getHeight(bst.root) == 0
                             ? "Warning! The tree is empty!"
                             : "The tree is filled!");
                         fo.saveData(bst);

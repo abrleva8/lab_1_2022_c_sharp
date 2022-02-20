@@ -25,7 +25,7 @@ namespace lab_1 {
         }
 
         public int numberOfChildren(Node<T>? node) {
-            return Convert.ToInt32(node.left is not null) + Convert.ToInt32(node.right is not null);
+            return Convert.ToInt32(node?.left is not null) + Convert.ToInt32(node?.right is not null);
         }
 
         public bool insert(T value) {
@@ -49,10 +49,10 @@ namespace lab_1 {
             if (this.root == null) {
                 this.root = newNode;
             } else {
-                if (value.CompareTo(before.value) < 0) {
+                if (before != null && value.CompareTo(before.value) < 0) {
                     before.left = newNode;
                 } else {
-                    before.right = newNode;
+                    if (before != null) before.right = newNode;
                 }
             }
 
@@ -84,7 +84,7 @@ namespace lab_1 {
             Node<T>? before = null;
             Node<T>? after = this.root;
 
-            while (after.value.CompareTo(value) != 0) {
+            while (after != null && after.value.CompareTo(value) != 0) {
                 before = after;
 
                 if (value.CompareTo(after.value) < 0) {
@@ -109,37 +109,40 @@ namespace lab_1 {
 
             if (this.numberOfChildren(after) == 1) {
                 if (before is null) {
-                    this._root = after.right ?? after.left;
+                    this._root = after?.right ?? after?.left;
                 } else {
                     if (value.CompareTo(before.value) < 0) {
-                        before.left = after.right ?? after.left;
+                        before.left = after?.right ?? after?.left;
 
-                        after.right = null;
+                        if (after != null) after.right = null;
                     } else if (value.CompareTo(before.value) > 0) {
-                        before.right = after.right ?? after.left;
+                        before.right = after?.right ?? after?.left;
                     }
                 }
 
-                after.right = null;
-                after.left = null;
+                if (after != null) {
+                    after.right = null;
+                    after.left = null;
+                }
             }
 
             if (this.numberOfChildren(after) == 2) {
-                Node<T> node = after.right;
-                Node<T> p = null;
-                while (node.left is not null) {
+                Node<T>? node = after?.right;
+                Node<T>? p = null;
+                while (node?.left is not null) {
                     p = node;
                     node = node.left;
                 }
 
 
                 if (p is not null) {
-                    p.left = node.right;
+                    p.left = node?.right;
                 } else {
-                    after.right = node.right;
+                    if (after != null) after.right = node?.right;
                 }
 
-                after.value = node.value;
+                if (after != null && node != null)
+                    after.value = node.value;
             }
 
 
@@ -200,7 +203,7 @@ namespace lab_1 {
             }
         }
 
-        public static BinarySearchTree<int> createRandomIntTree(int maxSize, int minValue, int maxValue) {
+        public static BinarySearchTree<int>? createRandomIntTree(int maxSize, int minValue, int maxValue) {
             var rand = new Random();
             int size = rand.Next(1, maxSize);
             List<int> values = new List<int>(size);

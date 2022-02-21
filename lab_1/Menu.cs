@@ -76,6 +76,8 @@ namespace lab_1 {
                         break;
                     case BinaryTreeInterface.PRINT:
                         bst?.print();
+                        System.Console.WriteLine();
+                        bst?.visualizeTree(bst);
                         break;
                     case BinaryTreeInterface.SAVE:
                         fo.saveData(bst);
@@ -96,15 +98,13 @@ namespace lab_1 {
             do {
                 Input input = new Input();
                 printMenu();
-                // поменять на максимум и минимум чтобы избежать лишней зависимости
-                MenuChoices choice = (MenuChoices) Input.getNumber((int) MenuChoices.EXIT, (int) MenuChoices.RANDOM);
+                MenuChoices choice = (MenuChoices) Input.getNumber();
                 switch (choice) {
                     case MenuChoices.EXIT:
                         System.Console.WriteLine("Your choice is EXIT");
                         System.Console.WriteLine("The program will be closed");
                         isRestart = false;
                         break;
-
                     case MenuChoices.CONSOLE:
                         System.Console.WriteLine("Your choice is CONSOLE");
                         System.Console.WriteLine("Enter the space-separated binary tree search's numbers in the next row");
@@ -113,9 +113,7 @@ namespace lab_1 {
                         System.Console.WriteLine(bst.getHeight(bst.root) == 0
                             ? "Warning! The tree is empty!"
                             : "The tree is filled!");
-                        fo.saveData(bst);
-                        binaryTreeInterface(ref bst);
-                        continue;
+                        break;
 
                     case MenuChoices.FILES:
                         System.Console.WriteLine("Your choice is FILES");
@@ -125,23 +123,31 @@ namespace lab_1 {
                             System.Console.WriteLine(bst != null && bst.getHeight(bst.root) == 0
                                 ? "Warning! The tree is empty!"
                                 : "The tree is filled!");
-                            binaryTreeInterface(ref bst);
                         }
-                        
                         break;
 
                     case MenuChoices.RANDOM:
                         System.Console.WriteLine("Your choice is RANDOM");
-                        bst = BinarySearchTree<int>.createRandomIntTree(10, 1, 10);
+                        System.Console.WriteLine("Enter the maximum size of the tree");
+                        int size = Input.getNumber(1, Int32.MaxValue);
+                        bst = BinarySearchTree<int>.createRandomIntTree(size);
                         System.Console.WriteLine(bst != null && bst.getHeight(bst.root) == 0
                             ? "Warning! The tree is empty!"
                             : "The tree is filled!");
-                        fo.saveData(bst);
-                        binaryTreeInterface(ref bst);
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        System.Console.WriteLine($"Please, enter a number between {(int)MenuChoices.EXIT} and {(int)MenuChoices.RANDOM}");
+                        continue;
                 }
+
+                if (choice != MenuChoices.FILES && choice != MenuChoices.EXIT) {
+                    fo.saveData(bst);
+                }
+
+                if (choice != MenuChoices.EXIT) {
+                    binaryTreeInterface(ref bst);
+                }
+                
             } while (isRestart);
         }
     }

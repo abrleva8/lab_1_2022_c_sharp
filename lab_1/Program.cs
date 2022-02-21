@@ -10,7 +10,7 @@ namespace lab_1 {
             Console.ReadKey();
         }
 
-        public static void Main(string[] args) {
+        public static void Main() {
             new Program().run();
         }
     }

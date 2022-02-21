@@ -5,7 +5,7 @@
             bool isOverwrite = false;
 
             while (File.Exists(fileName) && !isOverwrite) {
-                System.Console.WriteLine("The file with same name is exist. " +
+                System.Console.WriteLine("The file with same name exists. " +
                                          "Are you sure to want overwrite the file? Enter please y/n.");
                 isOverwrite = ConsoleInput.isChoiceYes();
                 if (!isOverwrite) {
@@ -18,7 +18,7 @@
 
 
         public void saveData<T>(BinarySearchTree<T>? bst, bool isOut = false) where T : IComparable {
-            System.Console.WriteLine("Do you want to save data to file? Input please y/n.");
+            System.Console.WriteLine("Do you want to save data to a file? Input please y/n.");
             bool isYes = ConsoleInput.isChoiceYes();
 
             if (isYes) {
@@ -42,19 +42,18 @@
             try {
                 if (fileName != null) fileStream = new FileStream(fileName, FileMode.Create);
             } catch (Exception) {
-                System.Console.WriteLine("Sorry, there is a problem with file.");
+                System.Console.WriteLine("Sorry, there is a problem with the file.");
                 return false;
             }
 
-            if (fileStream != null) {
-                using StreamWriter writer = new StreamWriter(fileStream);
-                writeDateToFile(writer, bst);
-            }
+            if (fileStream == null) return true;
+            using StreamWriter writer = new StreamWriter(fileStream);
+            writeDateToFile(writer, bst);
 
             return true;
         }
 
-        private void writeDateToFile<T>(StreamWriter writer, BinarySearchTree<T>? bst, bool isOut = false) where T : IComparable {
+        private void writeDateToFile<T>(TextWriter writer, BinarySearchTree<T>? bst, bool isOut = false) where T : IComparable {
             List<T>? detourData = bst?.rightDetour(bst.root);
             if (isOut) {
                 //bst.print();

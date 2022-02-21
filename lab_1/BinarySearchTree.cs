@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace lab_1 {
 
     class BinarySearchTree<T> where T : IComparable {
         private Node<T>? _root;
-        private const int COLUMN_WIDTH = 10;
+        private const int COLUMN_WIDTH = 5;
+        private const int MIN_VALUE = -100;
+        private const int MAX_VALUE = 100;
 
         public BinarySearchTree(List<T> values) {
             this._root = null;
@@ -160,7 +163,10 @@ namespace lab_1 {
             return 1 + Math.Max(leftHeight, rightHeight);
         }
 
-        
+        public int getHeightNode(Node<T>? node) {
+            return 1 + getHeight(_root) - getHeight(node);
+        }
+
         public void detour(Node<T>? node) {
             if (node == null) return;
             this.detour(node.left);
@@ -203,7 +209,7 @@ namespace lab_1 {
             }
         }
 
-        public static BinarySearchTree<int>? createRandomIntTree(int maxSize, int minValue, int maxValue) {
+        public static BinarySearchTree<int>? createRandomIntTree(int maxSize, int minValue = MIN_VALUE, int maxValue = MAX_VALUE) {
             var rand = new Random();
             int size = rand.Next(1, maxSize);
             List<int> values = new List<int>(size);
@@ -213,5 +219,70 @@ namespace lab_1 {
 
             return new BinarySearchTree<int>(values);
         }
+
+        private void drawLeft(Node<T> node, int row, int column, char[][] console, int columnDelta) {
+            if (node.left != null) {
+                int startColumnIndex = COLUMN_WIDTH * (column - columnDelta) + 2;
+                int endColumnIndex = COLUMN_WIDTH * column + 2;
+                for (int i = startColumnIndex; i < endColumnIndex; i++) {
+                    console[row + 1][i] = '-';
+                }
+
+                console[row + 1][startColumnIndex] = '\u250c';
+                console[row + 1][endColumnIndex] = '+';
+            }
+        }
+
+        private void drawRight(Node<T> node, int row, int column, char[][] console, int columnDelta) {
+            if (node.right != null) {
+                int startColumnIndex = COLUMN_WIDTH * column + 2;
+                int endColumnIndex = COLUMN_WIDTH * (column + columnDelta) + 2;
+                for (int i = startColumnIndex + 1; i < endColumnIndex; i++) {
+                    console[row + 1][i] = '-';
+                }
+
+                console[row + 1][startColumnIndex] = '+';
+                console[row + 1][endColumnIndex] = '\u2510';
+            }
+        }
+
+        private void visualizeNode(Node<T> node, int row, int column, char[][] console, int width) {
+            if (node != null) {
+                char[] chars = node.value.ToString().ToCharArray();
+                int margin = (COLUMN_WIDTH - chars.Length) / 2;
+                for (int i = 0; i < chars.Length; i++) {
+                    console[row][COLUMN_WIDTH * column + i + margin] = chars[i];
+                }
+
+                int columnDelta = (width + 1) / (int) Math.Pow(2, getHeightNode(node) + 1);
+                visualizeNode(node.left, row + 2, column - columnDelta, console, width);
+                visualizeNode(node.right, row + 2, column + columnDelta, console, width);
+                drawLeft(node, row, column, console, columnDelta);
+                drawRight(node, row, column, console, columnDelta);
+            }
+        }
+
+        private char[][] initializeVisualization(BinarySearchTree<T> bst, out int width) {
+            int height = bst.getHeight(bst.root);
+            width = (int) Math.Pow(2, height) - 1;
+            char[][] console = new char[height * 2][];
+            for (int i = 0; i < 2 * height; i++) {
+                console[i] = new char[COLUMN_WIDTH * width];
+                for (int j = 0; j < console[i].Length; j++) {
+                    console[i][j] = ' ';
+                }
+            }
+
+            return console;
+        }
+
+        public void visualizeTree(BinarySearchTree<T> bst) {
+            char[][] console = initializeVisualization(bst, out int width);
+            visualizeNode(bst.root, 0, width / 2, console, width);
+            foreach (char[] row in console) {
+                System.Console.WriteLine(row);
+            }
+        }
+
     }
 }

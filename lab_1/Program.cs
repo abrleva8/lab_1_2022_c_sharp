@@ -1,17 +1,15 @@
-﻿using System;
-
-namespace lab_1 {
+﻿namespace lab_1 {
     class Program {
 
-        private void run() {
+        private void Run() {
             Menu menu = new Menu();
-            menu.greeting();
-            menu.interfaceMenu();
+            menu.Greeting();
+            menu.InterfaceMenu();
             Console.ReadKey();
         }
 
         public static void Main() {
-            new Program().run();
+            new Program().Run();
         }
     }
 }

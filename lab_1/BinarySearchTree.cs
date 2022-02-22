@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections;
-using System.Runtime.InteropServices.ComTypes;
-
-namespace lab_1 {
+﻿namespace lab_1 {
 
     class BinarySearchTree<T> where T : IComparable {
         private Node<T>? _root;
-        private const int COLUMN_WIDTH = 5;
-        private const int MIN_VALUE = -100;
-        private const int MAX_VALUE = 100;
+        private const int ColumnWidth = 5;
+        public const int MaxRandomSize = 10;
+        private const int MinValue = -100;
+        private const int MaxValue = 100;
 
         public BinarySearchTree(List<T> values) {
             this._root = null;
             foreach (T value in values) {
-                this.insert(value);
+                this.Insert(value);
             }
         }
 
-        public Node<T>? root {
+        public Node<T>? Root {
             get {
                 return this._root;
             }
@@ -27,21 +24,21 @@ namespace lab_1 {
             }
         }
 
-        public int numberOfChildren(Node<T>? node) {
-            return Convert.ToInt32(node?.left is not null) + Convert.ToInt32(node?.right is not null);
+        private static int NumberOfChildren(Node<T>? node) {
+            return Convert.ToInt32(node?.Left is not null) + Convert.ToInt32(node?.Right is not null);
         }
 
-        public bool insert(T value) {
+        public bool Insert(T value) {
             Node<T>? before = null;
-            Node<T>? after = this.root;
+            Node<T>? after = this.Root;
 
             while (after != null) {
                 before = after;
 
-                if (value.CompareTo(after.value) < 0) {
-                    after = after.left;
-                } else if (value.CompareTo(after.value) > 0) {
-                    after = after.right;
+                if (value.CompareTo(after.Value) < 0) {
+                    after = after.Left;
+                } else if (value.CompareTo(after.Value) > 0) {
+                    after = after.Right;
                 } else {
                     return false;
                 }
@@ -49,27 +46,27 @@ namespace lab_1 {
 
             Node<T>? newNode = new Node<T>(value);
 
-            if (this.root == null) {
-                this.root = newNode;
+            if (this.Root == null) {
+                this.Root = newNode;
             } else {
-                if (before != null && value.CompareTo(before.value) < 0) {
-                    before.left = newNode;
+                if (before != null && value.CompareTo(before.Value) < 0) {
+                    before.Left = newNode;
                 } else {
-                    if (before != null) before.right = newNode;
+                    if (before != null) before.Right = newNode;
                 }
             }
 
             return true;
         }
 
-        public bool find(T value) {
-            Node<T>? node = this.root;
+        public bool Find(T value) {
+            Node<T>? node = this.Root;
             while (node != null) {
 
-                if (value.CompareTo(node.value) < 0) {
-                    node = node.left;
-                } else if (value.CompareTo(node.value) > 0) {
-                    node = node.right;
+                if (value.CompareTo(node.Value) < 0) {
+                    node = node.Left;
+                } else if (value.CompareTo(node.Value) > 0) {
+                    node = node.Right;
                 } else {
                     return true;
                 }
@@ -78,138 +75,138 @@ namespace lab_1 {
             return false;
         }
 
-        public bool remove(T value) {
+        public bool Remove(T value) {
             
-            if (!find(value)) {
+            if (!Find(value)) {
                 return false;
             }
 
             Node<T>? before = null;
-            Node<T>? after = this.root;
+            Node<T>? after = this.Root;
 
-            while (after != null && after.value.CompareTo(value) != 0) {
+            while (after != null && after.Value.CompareTo(value) != 0) {
                 before = after;
 
-                if (value.CompareTo(after.value) < 0) {
-                    after = after.left;
-                } else if (value.CompareTo(after.value) > 0) {
-                    after = after.right;
+                if (value.CompareTo(after.Value) < 0) {
+                    after = after.Left;
+                } else if (value.CompareTo(after.Value) > 0) {
+                    after = after.Right;
                 }
             }
 
-            if (this.numberOfChildren(after) == 0) {
+            if (NumberOfChildren(after) == 0) {
                 if (before is null) {
                     this._root = null;
                 } else {
-                    if (value.CompareTo(before.value) < 0) {
-                        before.left = null;
-                    } else if (value.CompareTo(before.value) > 0) {
-                        before.right = null;
+                    if (value.CompareTo(before.Value) < 0) {
+                        before.Left = null;
+                    } else if (value.CompareTo(before.Value) > 0) {
+                        before.Right = null;
                     }
                 }
                 // after = null;
             }
 
-            if (this.numberOfChildren(after) == 1) {
+            if (NumberOfChildren(after) == 1) {
                 if (before is null) {
-                    this._root = after?.right ?? after?.left;
+                    this._root = after?.Right ?? after?.Left;
                 } else {
-                    if (value.CompareTo(before.value) < 0) {
-                        before.left = after?.right ?? after?.left;
+                    if (value.CompareTo(before.Value) < 0) {
+                        before.Left = after?.Right ?? after?.Left;
 
-                        if (after != null) after.right = null;
-                    } else if (value.CompareTo(before.value) > 0) {
-                        before.right = after?.right ?? after?.left;
+                        if (after != null) after.Right = null;
+                    } else if (value.CompareTo(before.Value) > 0) {
+                        before.Right = after?.Right ?? after?.Left;
                     }
                 }
 
                 if (after != null) {
-                    after.right = null;
-                    after.left = null;
+                    after.Right = null;
+                    after.Left = null;
                 }
             }
 
-            if (this.numberOfChildren(after) == 2) {
-                Node<T>? node = after?.right;
+            if (NumberOfChildren(after) == 2) {
+                Node<T>? node = after?.Right;
                 Node<T>? p = null;
-                while (node?.left is not null) {
+                while (node?.Left is not null) {
                     p = node;
-                    node = node.left;
+                    node = node.Left;
                 }
 
 
                 if (p is not null) {
-                    p.left = node?.right;
+                    p.Left = node?.Right;
                 } else {
-                    if (after != null) after.right = node?.right;
+                    if (after != null) after.Right = node?.Right;
                 }
 
                 if (after != null && node != null)
-                    after.value = node.value;
+                    after.Value = node.Value;
             }
 
 
             return true;
         }
 
-        public int getHeight(Node<T>? node) {
+        public int GetHeight(Node<T>? node) {
             if (node is null) {
                 return 0;
             }
 
-            int leftHeight = getHeight(node.left);
-            int rightHeight = getHeight(node.right);
+            int leftHeight = GetHeight(node.Left);
+            int rightHeight = GetHeight(node.Right);
 
             return 1 + Math.Max(leftHeight, rightHeight);
         }
 
-        public int getHeightNode(Node<T>? node) {
-            return 1 + getHeight(_root) - getHeight(node);
+        public int GetHeightNode(Node<T>? node) {
+            return 1 + GetHeight(_root) - GetHeight(node);
         }
 
-        public void detour(Node<T>? node) {
+        public void Detour(Node<T>? node) {
             if (node == null) return;
-            this.detour(node.left);
-            Console.WriteLine(node + ": left child for " + node.left + " right child " + node.right);
-            this.detour(node.right);
+            this.Detour(node.Left);
+            Console.WriteLine(node + ": left child for " + node.Left + " right child " + node.Right);
+            this.Detour(node.Right);
         }
 
-        public List<T> rightDetour(Node<T>? node) {
+        public List<T> RightDetour(Node<T>? node) {
             List<T> detour = new List<T>();
-            rightDetourWorker(node, ref detour);
+            RightDetourWorker(node, ref detour);
             return detour;
         }
 
-        private void rightDetourWorker(Node<T>? node, ref List<T> detour) {
+        private void RightDetourWorker(Node<T>? node, ref List<T> detour) {
             if (node == null) return;
-            detour.Add(node.value);
-            this.rightDetourWorker(node.left, ref detour);
-            this.rightDetourWorker(node.right, ref detour);
+            detour.Add(node.Value);
+            this.RightDetourWorker(node.Left, ref detour);
+            this.RightDetourWorker(node.Right, ref detour);
         }
 
-        public void print() {
-            this.print(this._root, 0);
+        public void Print() {
+            Print(this._root, 0);
         }
 
-        private void print(Node<T>? node, int space) {
+        private static void Print(Node<T>? node, int space) {
             while (true) {
                 if (node is null) {
                     return;
                 }
 
-                space += COLUMN_WIDTH;
+                space += ColumnWidth;
 
-                print(node.right, space);
+                Print(node.Right, space);
 
-                System.Console.WriteLine();
-                for (int i = COLUMN_WIDTH; i < space; i++) System.Console.Write(" ");
-                System.Console.WriteLine(node);
+                Console.WriteLine();
+                for (int i = ColumnWidth; i < space; i++) Console.Write(" ");
+                Console.WriteLine(node);
 
-                node = node.left;
+                node = node.Left;
             }
         }
 
-        public static BinarySearchTree<int>? createRandomIntTree(int maxSize, int minValue = MIN_VALUE, int maxValue = MAX_VALUE) {
+        public static BinarySearchTree<int>? CreateRandomIntTree(int maxSize, int minValue = MinValue, int maxValue = MaxValue) {
             var rand = new Random();
             int size = rand.Next(1, maxSize);
             List<int> values = new List<int>(size);
@@ -220,10 +217,10 @@ namespace lab_1 {
             return new BinarySearchTree<int>(values);
         }
 
-        private void drawLeft(Node<T> node, int row, int column, char[][] console, int columnDelta) {
-            if (node.left != null) {
-                int startColumnIndex = COLUMN_WIDTH * (column - columnDelta) + 2;
-                int endColumnIndex = COLUMN_WIDTH * column + 2;
+        private static void DrawLeft(Node<T>? node, int row, int column, char[][] console, int columnDelta) {
+            if (node?.Left != null) {
+                int startColumnIndex = ColumnWidth * (column - columnDelta) + 2;
+                int endColumnIndex = ColumnWidth * column + 2;
                 for (int i = startColumnIndex; i < endColumnIndex; i++) {
                     console[row + 1][i] = '-';
                 }
@@ -233,10 +230,10 @@ namespace lab_1 {
             }
         }
 
-        private void drawRight(Node<T> node, int row, int column, char[][] console, int columnDelta) {
-            if (node.right != null) {
-                int startColumnIndex = COLUMN_WIDTH * column + 2;
-                int endColumnIndex = COLUMN_WIDTH * (column + columnDelta) + 2;
+        private static void DrawRight(Node<T>? node, int row, int column, char[][] console, int columnDelta) {
+            if (node?.Right != null) {
+                int startColumnIndex = ColumnWidth * column + 2;
+                int endColumnIndex = ColumnWidth * (column + columnDelta) + 2;
                 for (int i = startColumnIndex + 1; i < endColumnIndex; i++) {
                     console[row + 1][i] = '-';
                 }
@@ -246,28 +243,30 @@ namespace lab_1 {
             }
         }
 
-        private void visualizeNode(Node<T> node, int row, int column, char[][] console, int width) {
+        private void VisualizeNode(Node<T>? node, int row, int column, char[][] console, int width) {
             if (node != null) {
-                char[] chars = node.value.ToString().ToCharArray();
-                int margin = (COLUMN_WIDTH - chars.Length) / 2;
-                for (int i = 0; i < chars.Length; i++) {
-                    console[row][COLUMN_WIDTH * column + i + margin] = chars[i];
+                char[]? chars = node.Value.ToString()?.ToCharArray();
+                if (chars != null) {
+                    int margin = (ColumnWidth - chars.Length) / 2;
+                    for (int i = 0; i < chars.Length; i++) {
+                        console[row][ColumnWidth * column + i + margin] = chars[i];
+                    }
                 }
 
-                int columnDelta = (width + 1) / (int) Math.Pow(2, getHeightNode(node) + 1);
-                visualizeNode(node.left, row + 2, column - columnDelta, console, width);
-                visualizeNode(node.right, row + 2, column + columnDelta, console, width);
-                drawLeft(node, row, column, console, columnDelta);
-                drawRight(node, row, column, console, columnDelta);
+                int columnDelta = (width + 1) / (int) Math.Pow(2, GetHeightNode(node) + 1);
+                VisualizeNode(node.Left, row + 2, column - columnDelta, console, width);
+                VisualizeNode(node.Right, row + 2, column + columnDelta, console, width);
+                DrawLeft(node, row, column, console, columnDelta);
+                DrawRight(node, row, column, console, columnDelta);
             }
         }
 
-        private char[][] initializeVisualization(BinarySearchTree<T> bst, out int width) {
-            int height = bst.getHeight(bst.root);
+        private static char[][] InitializeVisualization(BinarySearchTree<T> bst, out int width) {
+            int height = bst.GetHeight(bst.Root);
             width = (int) Math.Pow(2, height) - 1;
             char[][] console = new char[height * 2][];
             for (int i = 0; i < 2 * height; i++) {
-                console[i] = new char[COLUMN_WIDTH * width];
+                console[i] = new char[ColumnWidth * width];
                 for (int j = 0; j < console[i].Length; j++) {
                     console[i][j] = ' ';
                 }
@@ -276,11 +275,18 @@ namespace lab_1 {
             return console;
         }
 
-        public void visualizeTree(BinarySearchTree<T> bst) {
-            char[][] console = initializeVisualization(bst, out int width);
-            visualizeNode(bst.root, 0, width / 2, console, width);
+
+        public char[][] GetDrawedTree() {
+            char[][] console = InitializeVisualization(this, out int width);
+            VisualizeNode(this.Root, 0, width / 2, console, width);
+            return console;
+        }
+        
+        public void VisualizeTree() {
+            char[][] console = InitializeVisualization(this, out int width);
+            VisualizeNode(this.Root, 0, width / 2, console, width);
             foreach (char[] row in console) {
-                System.Console.WriteLine(row);
+                Console.WriteLine(row);
             }
         }
 

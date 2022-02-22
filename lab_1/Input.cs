@@ -1,9 +1,6 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
-
-namespace lab_1 {
+﻿namespace lab_1 {
     class Input {
-        public static int getNumber() {
+        public static int GetNumber() {
             int num = 0;
             while (true) {
 
@@ -17,26 +14,26 @@ namespace lab_1 {
             return num;
         }
 
-        public static int getNumber(int a, int b) {
-            int num = getNumber();
+        public static int GetNumber(int a, int b) {
+            int num = GetNumber();
             while (num < a || num > b) {
                 Console.WriteLine($"Please enter number between {a} and {b}");
-                num = getNumber();
+                num = GetNumber();
             }
 
             return num;
         }
 
 
-        public List<Int32> getArray(string? str) {
+        public static List<Int32> GetArray(string? str) {
             string[]? subs = str?.Split(' ');
             List<Int32> numbers = new List<int>();
-            if (subs != null)
-                foreach (string sub in subs) {
-                    if (int.TryParse(sub, out int number)) {
-                        numbers.Add(number);
-                    }
+            if (subs == null) return numbers;
+            foreach (string sub in subs) {
+                if (int.TryParse(sub, out int number)) {
+                    numbers.Add(number);
                 }
+            }
 
             return numbers;
         }

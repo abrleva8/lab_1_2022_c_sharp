@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace lab_1 {
+﻿namespace lab_1 {
     class Node<T> {
         private T _value;
         private Node<T>? _left;
@@ -10,7 +8,7 @@ namespace lab_1 {
             this._value = value;
         }
 
-        public T value {
+        public T Value {
             get {
                 return this._value;
             }
@@ -20,7 +18,7 @@ namespace lab_1 {
             }
         }
 
-        public Node<T>? left {
+        public Node<T>? Left {
             get {
                 return this._left;
             }
@@ -30,7 +28,7 @@ namespace lab_1 {
             }
         }
 
-        public Node<T>? right {
+        public Node<T>? Right {
             get {
                 return this._right;
             }
@@ -42,7 +40,7 @@ namespace lab_1 {
 
 
         public override string? ToString() {
-            return this.value?.ToString();
+            return this.Value?.ToString();
         }
     }
 }

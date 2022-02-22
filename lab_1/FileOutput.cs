@@ -1,67 +1,70 @@
 ﻿namespace lab_1 {
     class FileOutput {
 
-        void tryOverwriteFile(ref string? fileName) {
+        void TryOverwriteFile(ref string? fileName) {
             bool isOverwrite = false;
 
             while (File.Exists(fileName) && !isOverwrite) {
-                System.Console.WriteLine("The file with same name exists. " +
+                Console.WriteLine("The file with same name exists. " +
                                          "Are you sure to want overwrite the file? Enter please y/n.");
-                isOverwrite = ConsoleInput.isChoiceYes();
+                isOverwrite = ConsoleInput.IsChoiceYes();
                 if (!isOverwrite) {
-                    System.Console.WriteLine("Please enter the filename:");
-                    fileName = System.Console.ReadLine();
+                    Console.WriteLine("Please enter the filename:");
+                    fileName = Console.ReadLine();
                 }
             }
 
         }
 
 
-        public void saveData<T>(BinarySearchTree<T>? bst, bool isOut = false) where T : IComparable {
-            System.Console.WriteLine("Do you want to save data to a file? Input please y/n.");
-            bool isYes = ConsoleInput.isChoiceYes();
+        public void SaveData<T>(BinarySearchTree<T>? bst, bool isOut = false) where T : IComparable {
+            Console.WriteLine("Do you want to save data to a file? Input please y/n.");
+            bool isYes = ConsoleInput.IsChoiceYes();
 
             if (isYes) {
-                bool isSuccess = saveDataToFile(bst);
+                bool isSuccess = SaveDataToFile(bst, isOut);
 
                 while (!isSuccess) {
-                    System.Console.WriteLine("The data didn't save! Try again!");
-                    isSuccess = saveDataToFile(bst);
+                    Console.WriteLine("The data didn't save! Try again!");
+                    isSuccess = SaveDataToFile(bst, isOut);
                 }
 
-                System.Console.WriteLine("The data saved successfully!");
+                Console.WriteLine("The data saved successfully!");
             }
         }
 
 
-        bool saveDataToFile<T>(BinarySearchTree<T>? bst, bool isOut = false) where T : IComparable {
-            System.Console.WriteLine("Please, enter the filename:");
-            string? fileName = System.Console.ReadLine();
-            tryOverwriteFile(ref fileName);
+        bool SaveDataToFile<T>(BinarySearchTree<T>? bst, bool isOut = false) where T : IComparable {
+            Console.WriteLine("Please, enter the filename:");
+            string? fileName = Console.ReadLine();
+            TryOverwriteFile(ref fileName);
             FileStream? fileStream = null;
             try {
                 if (fileName != null) fileStream = new FileStream(fileName, FileMode.Create);
             } catch (Exception) {
-                System.Console.WriteLine("Sorry, there is a problem with the file.");
+                Console.WriteLine("Sorry, there is a problem with the file.");
                 return false;
             }
 
             if (fileStream == null) return true;
             using StreamWriter writer = new StreamWriter(fileStream);
-            writeDateToFile(writer, bst);
+            WriteDateToFile(writer, bst, isOut);
 
             return true;
         }
 
-        private void writeDateToFile<T>(TextWriter writer, BinarySearchTree<T>? bst, bool isOut = false) where T : IComparable {
-            List<T>? detourData = bst?.rightDetour(bst.root);
+        private void WriteDateToFile<T>(TextWriter writer, BinarySearchTree<T>? bst, bool isOut = false) where T : IComparable {
+            List<T>? detourData = bst?.RightDetour(bst.Root);
+            if (detourData == null || bst == null) return;
             if (isOut) {
-                //bst.print();
+                char[][] drawedTree = bst.GetDrawedTree();
+                foreach (var row in drawedTree) {
+                    writer.WriteLine(row);
+                }
             } else {
-                if (detourData != null)
-                    foreach (T data in detourData) {
-                        writer.Write(data + " ");
-                    }
+                foreach (T data in detourData) {
+                    writer.Write(data + " ");
+                }
             }
         }
     }

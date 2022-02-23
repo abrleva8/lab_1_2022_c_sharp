@@ -13,8 +13,7 @@ namespace lab_1 {
                     try {
                         List<int> tmp = GetArray(row);
                         numbers.AddRange(tmp);
-                    }
-                    catch (Exception ex) {
+                    } catch (Exception ex) {
                         Console.WriteLine(ex.Message);
                         return false;
                     }

@@ -56,7 +56,8 @@
         private void WriteDateToFile<T>(TextWriter writer, BinarySearchTree<T>? bst, bool isOut = false) where T : IComparable {
             if (bst == null) return;
             if (isOut) {
-                char[][] drawedTree = bst.GetDrawedTree();
+                TreeDrawer<T> treeDrawer = new TreeDrawer<T>(bst);
+                char[][] drawedTree = treeDrawer.GetDrawedTree();
                 foreach (var row in drawedTree) {
                     writer.WriteLine(row);
                 }

@@ -73,10 +73,9 @@
                         Console.WriteLine(isDeleted ? $"{value} has been deleted from the tree" : $"{value} isn't in the tree");
                         break;
                     case lab_1.BinaryTreeInterface.Print:
-                        bst.OrderDetour(bst.Root);
-                        //bst?.Print();
                         Console.WriteLine();
-                        bst?.VisualizeTree();
+                        TreeDrawer<int> treeDrawer = new TreeDrawer<int>(bst);
+                        treeDrawer.VisualizeTree();
                         break;
                     case lab_1.BinaryTreeInterface.Save:
                         fo.SaveData(bst, true);
@@ -106,6 +105,7 @@
                         Console.WriteLine("The program will be closed");
                         isRestart = false;
                         break;
+
                     case MenuChoices.Console:
                         Console.WriteLine("Your choice is CONSOLE");
                         Console.WriteLine("Enter the space-separated binary tree search's numbers in the next row");

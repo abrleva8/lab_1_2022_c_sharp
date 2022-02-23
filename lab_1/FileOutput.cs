@@ -54,14 +54,15 @@
         }
 
         private void WriteDateToFile<T>(TextWriter writer, BinarySearchTree<T>? bst, bool isOut = false) where T : IComparable {
-            List<T>? detourData = bst?.RightDetour(bst.Root);
-            if (detourData == null || bst == null) return;
+            if (bst == null) return;
             if (isOut) {
                 char[][] drawedTree = bst.GetDrawedTree();
                 foreach (var row in drawedTree) {
                     writer.WriteLine(row);
                 }
             } else {
+                List<T>? detourData = bst?.RightDetour(bst.Root);
+                if (detourData == null) return;
                 foreach (T data in detourData) {
                     writer.Write(data + " ");
                 }

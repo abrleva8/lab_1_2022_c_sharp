@@ -30,8 +30,11 @@
             List<Int32> numbers = new List<int>();
             if (subs == null) return numbers;
             foreach (string sub in subs) {
+                if (sub.Length == 0) continue;
                 if (int.TryParse(sub, out int number)) {
                     numbers.Add(number);
+                } else {
+                    throw new Exception("The data is not a tree!");
                 }
             }
 

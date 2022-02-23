@@ -1,6 +1,6 @@
 ﻿namespace lab_1 {
 
-    class BinarySearchTree<T> where T : IComparable {
+    public class BinarySearchTree<T> where T : IComparable {
         private Node<T>? _root;
         private const int ColumnWidth = 5;
         public const int MaxRandomSize = 10;
@@ -164,24 +164,30 @@
             return 1 + GetHeight(_root) - GetHeight(node);
         }
 
-        public void Detour(Node<T>? node) {
+        public List<T> OrderDetour(Node<T>? node) {
+            List<T> detour = new List<T>();
+            OrderDetourWorker(node, detour);
+            return detour;
+        }
+
+        private void OrderDetourWorker(Node<T>? node, List<T> detour) {
             if (node == null) return;
-            this.Detour(node.Left);
-            Console.WriteLine(node + ": left child for " + node.Left + " right child " + node.Right);
-            this.Detour(node.Right);
+            this.OrderDetourWorker(node.Left, detour);
+            detour.Add(node.Value);
+            this.OrderDetourWorker(node.Right, detour);
         }
 
         public List<T> RightDetour(Node<T>? node) {
             List<T> detour = new List<T>();
-            RightDetourWorker(node, ref detour);
+            RightDetourWorker(node, detour);
             return detour;
         }
 
-        private void RightDetourWorker(Node<T>? node, ref List<T> detour) {
+        private void RightDetourWorker(Node<T>? node, List<T> detour) {
             if (node == null) return;
             detour.Add(node.Value);
-            this.RightDetourWorker(node.Left, ref detour);
-            this.RightDetourWorker(node.Right, ref detour);
+            this.RightDetourWorker(node.Left, detour);
+            this.RightDetourWorker(node.Right, detour);
         }
 
         public void Print() {

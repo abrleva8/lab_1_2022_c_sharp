@@ -73,6 +73,7 @@
                         Console.WriteLine(isDeleted ? $"{value} has been deleted from the tree" : $"{value} isn't in the tree");
                         break;
                     case lab_1.BinaryTreeInterface.Print:
+                        bst.OrderDetour(bst.Root);
                         //bst?.Print();
                         Console.WriteLine();
                         bst?.VisualizeTree();
@@ -108,11 +109,17 @@
                     case MenuChoices.Console:
                         Console.WriteLine("Your choice is CONSOLE");
                         Console.WriteLine("Enter the space-separated binary tree search's numbers in the next row");
-                        List<int> numbers = Input.GetArray(Console.ReadLine());
-                        bst = new BinarySearchTree<int>(numbers);
-                        Console.WriteLine(bst.GetHeight(bst.Root) == 0
-                            ? "Warning! The tree is empty!"
-                            : "The tree is filled!");
+                        try {
+                            List<int> numbers = Input.GetArray(Console.ReadLine());
+                            bst = new BinarySearchTree<int>(numbers);
+                            Console.WriteLine(bst.GetHeight(bst.Root) == 0
+                                ? "Warning! The tree is empty!"
+                                : "The tree is filled!");
+                        }
+                        catch (Exception ex) {
+                            Console.WriteLine(ex.Message);
+                            continue;
+                        }
                         break;
 
                     case MenuChoices.Files:
@@ -123,6 +130,8 @@
                             Console.WriteLine(bst != null && bst.GetHeight(bst.Root) == 0
                                 ? "Warning! The tree is empty!"
                                 : "The tree is filled!");
+                        } else {
+                            continue;
                         }
                         break;
 

@@ -1,5 +1,5 @@
 ﻿namespace lab_1 {
-    class Node<T> {
+    public class Node<T> {
         private T _value;
         private Node<T>? _left;
         private Node<T>? _right;

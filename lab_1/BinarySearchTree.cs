@@ -148,7 +148,7 @@
             return true;
         }
 
-        public int GetHeight<T>(Node<T>? node) {
+        public int GetHeight(Node<T>? node) {
             if (node is null) {
                 return 0;
             }
@@ -159,7 +159,7 @@
             return 1 + Math.Max(leftHeight, rightHeight);
         }
 
-        public int GetHeightNode<T>(Node<T> node) {
+        public int GetHeightNode(Node<T> node) {
             return 1 + GetHeight(_root) - GetHeight(node);
         }
 

@@ -21,20 +21,19 @@
             Console.WriteLine("Do you want to save data to a file? Input please y/n.");
             bool isYes = ConsoleInput.IsChoiceYes();
 
-            if (isYes) {
-                bool isSuccess = SaveDataToFile(bst, isOut);
+            if (!isYes) return;
+            bool isSuccess = SaveDataToFile(bst, isOut);
 
-                while (!isSuccess) {
-                    Console.WriteLine("The data didn't save! Try again!");
-                    isSuccess = SaveDataToFile(bst, isOut);
-                }
-
-                Console.WriteLine("The data saved successfully!");
+            while (!isSuccess) {
+                Console.WriteLine("The data didn't save! Try again!");
+                isSuccess = SaveDataToFile(bst, isOut);
             }
+
+            Console.WriteLine("The data saved successfully!");
         }
 
 
-        bool SaveDataToFile<T>(BinarySearchTree<T>? bst, bool isOut = false) where T : IComparable {
+        private bool SaveDataToFile<T>(BinarySearchTree<T>? bst, bool isOut = false) where T : IComparable {
             Console.WriteLine("Please, enter the filename:");
             string? fileName = Console.ReadLine();
             TryOverwriteFile(ref fileName);
@@ -57,8 +56,8 @@
             if (bst == null) return;
             if (isOut) {
                 TreeDrawer<T> treeDrawer = new TreeDrawer<T>(bst);
-                char[][] drawedTree = treeDrawer.GetDrawedTree();
-                foreach (var row in drawedTree) {
+                char[][] drewTree = treeDrawer.GetDrawedTree();
+                foreach (var row in drewTree) {
                     writer.WriteLine(row);
                 }
             } else {

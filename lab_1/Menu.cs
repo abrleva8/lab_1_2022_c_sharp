@@ -46,7 +46,7 @@
             Console.WriteLine("Enter 0 to back.");
         }
 
-        public void BinaryTreeInterface(ref BinarySearchTree<int>? bst) {
+        public void BinaryTreeInterface(BinarySearchTree<int>? bst) {
             bool isRestart = true;
             int value = 0;
             do {
@@ -154,7 +154,7 @@
                 }
 
                 if (choice != MenuChoices.Exit) {
-                    BinaryTreeInterface(ref bst);
+                    BinaryTreeInterface(bst);
                 }
                 
             } while (isRestart);

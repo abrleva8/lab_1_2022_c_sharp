@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace lab_1 {
+﻿namespace lab_1 {
     class FileInput : Input {
 
         public bool Read(ref BinarySearchTree<int>? bst){
